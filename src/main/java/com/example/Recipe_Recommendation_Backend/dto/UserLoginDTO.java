@@ -1,17 +1,14 @@
 package com.example.Recipe_Recommendation_Backend.dto;
 
-
-
-//serializing the json input to java object
-
-
-public class UserSignUpDTO {
+public class UserLoginDTO {
     private String username;
     private String password;
 
-    //getters and setters part of encapsulation for data security
+
+    //getters and setters
+
     public void setUsername(String username){
-        this.username = username;
+        this.username=username;
     }
     public String getUsername(){
         return username;
