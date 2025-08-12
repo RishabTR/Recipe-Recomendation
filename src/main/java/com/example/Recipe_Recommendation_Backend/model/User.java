@@ -1,5 +1,7 @@
 package com.example.Recipe_Recommendation_Backend.model;
 
+
+
 import jakarta.persistence.*;
 
 @Entity // so that JPA knows this class should map to a database table.
