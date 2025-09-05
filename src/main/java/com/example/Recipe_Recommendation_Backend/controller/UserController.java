@@ -1,8 +1,14 @@
 package com.example.Recipe_Recommendation_Backend.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +21,15 @@ import com.example.Recipe_Recommendation_Backend.model.User;
 import com.example.Recipe_Recommendation_Backend.services.UserService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class UserController {
     private final UserService userService;
+ 
 
     @Autowired
     public UserController(UserService userService){
         this.userService = userService;
+       
     }
 
     @PostMapping("/signup")
@@ -30,27 +38,19 @@ public class UserController {
         user.setUsername(userSignUpDTO.getUsername());
         user.setPassword(userSignUpDTO.getPassword());
 
-        User registerUser = userService.registerUser(user);
+        UserDTO registerUser = userService.registerUser(user);
 
         UserDTO userDTO = new UserDTO();
         
         userDTO.setId(registerUser.getId());
         userDTO.setUsername(registerUser.getUsername());
+        userDTO.setToken(registerUser.getToken());
 
         return new ResponseEntity<>(userDTO,HttpStatus.CREATED);
     }
     @PostMapping("/login")
     public ResponseEntity<UserDTO> loginUser(@RequestBody UserLoginDTO userLoginDTO){
-        User user = new User();
-        user.setUsername(userLoginDTO.getUsername());
-        user.setPassword(userLoginDTO.getPassword());
-
-        User loginUser = userService.loginUser(user);
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(loginUser.getId());
-        userDTO.setUsername(loginUser.getUsername());
-
-        return new ResponseEntity<>(userDTO,HttpStatus.OK);
+        UserDTO response = userService.loginUser(userLoginDTO);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
